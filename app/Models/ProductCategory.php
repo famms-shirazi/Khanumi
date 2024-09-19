@@ -12,4 +12,12 @@ class ProductCategory extends Model
         'title',
         'parent_id'
     ];
+
+    public function children(){
+        return $this->hasMany(ProductCategory::class,'parent_id');
+    }
+
+    public function parent(){
+        return $this->belongsTo(self::class,'parent_id');
+    }
 }

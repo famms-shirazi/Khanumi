@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users_tbl ', function (Blueprint $table) {
+        Schema::create('users_tbl', function (Blueprint $table) {
 
             $table->id();
 
@@ -22,10 +22,6 @@ return new class extends Migration
             $table->integer('national_code');
             $table->boolean('gender');
             $table->date('birthday_date');
-
-            //relational fields
-            $table->foreignId('wallet_id')->constrained('wallets_tbl')->onDelete('cascade');
-
             $table->timestamps();
         });
 
@@ -50,7 +46,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('users_tbl');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }
