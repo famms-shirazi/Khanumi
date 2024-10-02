@@ -11,18 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('addresses', function (Blueprint $table) {
+        Schema::create('addresses_tbl', function (Blueprint $table) {
             $table->id();
 
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('province');
-            $table->string('city');
+            $table->string('address');
             $table->integer('postal_code');
-            $table->enum('receive_status',[]);
 
             //relational fields
             $table->foreignId('user_id')->constrained('users_tbl')->onDelete('cascade');
+            $table->foreignId('city_id')->constrained('cities_tbl')->onDelete('cascade');
 
             $table->timestamps();
         });

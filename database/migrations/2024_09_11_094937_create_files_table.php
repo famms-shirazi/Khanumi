@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('fileable_id');
             $table->string('fileable_type');
 
+            //relational_fields
+            $table->foreignId('user_id')->constrained('users_tbl')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

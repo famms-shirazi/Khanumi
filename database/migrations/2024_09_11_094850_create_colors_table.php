@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('colors', function (Blueprint $table) {
+        Schema::create('colors_tbl', function (Blueprint $table) {
             $table->id();
             $table->string('unique_id');
 

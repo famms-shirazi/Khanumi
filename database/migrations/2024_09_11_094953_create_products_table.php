@@ -21,10 +21,13 @@ return new class extends Migration
             $table->text('product_introduction_text');
             $table->text('consumption_guide_text');
             $table->boolean('special_offer');
+            $table->integer('inventory');
 
             //relational fields
             $table->foreignId('brand_id')->constrained('brands_tbl')->onDelete('cascade');
             $table->foreignId('discount_id')->constrained('discounts_tbl')->onDelete('cascade');
+            $table->foreignId('color_id')->constrained('color_tbl')->onDelete('cascade');
+            $table->foreignId('shopping_carts_id')->constrained('shopping_carts_tbl')->onDelete('cascade');
 
             $table->timestamps();
         });

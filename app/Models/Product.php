@@ -12,8 +12,8 @@ class Product extends Model
     {
     use HasFactory;
         protected $fillable = [
-            'Persian_title',
-            'English_title',
+            'persian_title',
+            'english_title',
             'product_size',
             'price',
             'product_introduction_text',
@@ -29,9 +29,9 @@ class Product extends Model
         return $this->belongsTo(Discount::class);
     }
 
-    public function colors(): HasMany
+    public function color(): BelongsTo
     {
-        return $this->hasMany(Color::class);
+        return $this->belongsTo(Color::class);
     }
 
     public function comments(): HasMany

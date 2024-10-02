@@ -16,8 +16,7 @@ return new class extends Migration
             $table->id();
 
             $table->integer('amount');
-            $table->date('expiration_date');
-            $table->time('expiration_time');
+            $table->dateTime('expiration_date_time');
 
             $table->timestamps();
         });

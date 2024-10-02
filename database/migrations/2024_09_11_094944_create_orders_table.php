@@ -18,6 +18,8 @@ return new class extends Migration
 
             //relational fields
             $table->foreignId('user_id')->constrained('users_tbl')->onDelete('cascade');
+            $table->foreignId('order_details_id')->constrained('order_details_tbl')->onDelete('cascade');
+            $table->foreignId('transaction_id')->constrained('transactions_tbl')->onDelete('cascade');
 
             $table->timestamps();
         });

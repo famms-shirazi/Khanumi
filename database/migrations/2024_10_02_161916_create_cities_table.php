@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_shopping_cart_tbl', function (Blueprint $table) {
+        Schema::create('cities_tbl', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->foreignId('shopping_cart_id')->constrained()->onDelete('cascade');
+            //relational fields
+            $table->foreignId('province_id')->constrained('provinces_tbl')->onDelete('cascade');
 
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_shopping_card_tbl');
+        Schema::dropIfExists('cities_tbl');
     }
 };

@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comments_tbl', function (Blueprint $table) {
+        Schema::create('provinces_tbl', function (Blueprint $table) {
             $table->id();
-            $table->text('text');
-
-            //relational fields
-            $table->foreignId('user_id')->constrained('users_tbl')->onDelete('cascade');
-
             $table->timestamps();
         });
     }
@@ -27,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('provinces');
     }
 };
