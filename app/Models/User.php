@@ -56,11 +56,6 @@ class User extends Authenticatable
         return $this->HasMany(ShoppingCart::class);
     }
 
-    public function scores(): HasMany
-    {
-        return $this->HasMany(Score::class);
-    }
-
     public function orders(): HasMany
     {
         return $this->HasMany(Order::class);
@@ -69,6 +64,14 @@ class User extends Authenticatable
     public function addresses(): HasMany
     {
         return $this->HasMany(Address::class);
+    }
+    public function comments(): HasMany
+    {
+        return $this->HasMany(Comment::class);
+    }
+    public function files(): HasMany
+    {
+        return $this->HasMany(File::class);
     }
 
 }

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Product extends Model
     {
@@ -34,18 +35,19 @@ class Product extends Model
         return $this->belongsTo(Color::class);
     }
 
-    public function comments(): HasMany
+
+    public function shoppingCart(): BelongsTo
     {
-        return $this->hasMany(Comment::class);
+        return $this->belongsTo(ShoppingCart::class);
     }
 
-    public function scores(): HasMany
-    {
-        return $this->hasMany(Score::class);
+    public function likes():MorphMany{
+        return $this->morphMany(Like::class,'likeable');
     }
-
-    public function shoppingCarts(): BelongsToMany
-    {
-        return $this->belongsToMany(ShoppingCart::class);
+    public function comments():MorphMany{
+        return $this->morphMany(Comment::class,'commentable');
+    }
+    public function files():MorphMany{
+        return $this->morphMany(File::class,'fileable');
     }
 }

@@ -17,8 +17,12 @@ class Address extends Model
         'receive_status'
     ];
 
-    public function user(): BelongsTo
+    public function commentable(): MorphTo
     {
-        return $this->belongsTo(User::class);
+        return $this->morphTo();
+    }
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
     }
 }
