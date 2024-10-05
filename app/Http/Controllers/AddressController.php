@@ -11,7 +11,7 @@ class AddressController extends Controller
      */
     public function index()
     {
-        //
+        return "index controller";
     }
 
     /**
@@ -19,7 +19,7 @@ class AddressController extends Controller
      */
     public function create()
     {
-        //
+        return "create controller";
     }
 
     /**
@@ -27,7 +27,7 @@ class AddressController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return "store controller";
     }
 
     /**
@@ -35,7 +35,7 @@ class AddressController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return "show controller";
     }
 
     /**
@@ -43,7 +43,7 @@ class AddressController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return "edit controller";
     }
 
     /**
@@ -51,7 +51,7 @@ class AddressController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        return "update controller";
     }
 
     /**
@@ -59,6 +59,6 @@ class AddressController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        return "destroy controller";
     }
 }
