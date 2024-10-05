@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('addresses_tbl', function (Blueprint $table) {
             $table->id();
 
-            $table->string('first_name');
-            $table->string('last_name');
             $table->string('province');
             $table->string('city');
             $table->integer('postal_code');

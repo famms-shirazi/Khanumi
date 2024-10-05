@@ -10,8 +10,8 @@ class Brand extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'Persian_title',
-        'English_title',
+        'persian_title',
+        'english_title',
     ];
 
     public function brands(): HasMany
