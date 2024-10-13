@@ -14,10 +14,6 @@ return new class extends Migration
         Schema::create('colors_tbl', function (Blueprint $table) {
             $table->id();
             $table->string('unique_id');
-
-            //relational fields
-            $table->foreignId('color_id')->constrained('products_tbl')->onDelete('cascade');
-
             $table->timestamps();
         });
     }

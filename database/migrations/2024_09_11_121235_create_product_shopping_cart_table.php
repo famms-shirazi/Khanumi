@@ -13,10 +13,8 @@ return new class extends Migration
     {
         Schema::create('product_shopping_cart_tbl', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->foreignId('shopping_cart_id')->constrained()->onDelete('cascade');
-
+            $table->foreignId('product_id')->constrained('products_tbl')->onDelete('cascade');
+            $table->foreignId('shopping_cart_id')->constrained('shopping_carts_tbl')->onDelete('cascade');
             $table->timestamps();
         });
     }

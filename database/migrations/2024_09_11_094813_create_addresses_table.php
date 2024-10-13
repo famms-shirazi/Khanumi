@@ -13,16 +13,9 @@ return new class extends Migration
     {
         Schema::create('addresses_tbl', function (Blueprint $table) {
             $table->id();
-
-            $table->string('province');
-            $table->string('city');
             $table->integer('postal_code');
-            $table->enum('receive_status',[]);
-
-            //relational fields
             $table->foreignId('user_id')->constrained('users_tbl')->onDelete('cascade');
-            $table->foreignId('city_id')->constrained('city_tbl')->onDelete('cascade');
-
+            $table->foreignId('city_id')->constrained('city')->onDelete('cascade');
             $table->timestamps();
         });
     }

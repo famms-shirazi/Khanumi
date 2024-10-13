@@ -14,10 +14,13 @@ return new class extends Migration
         Schema::create('discounts_tbl', function (Blueprint $table) {
 
             $table->id();
-
+            $table->string('code')->unique();
+            $table->string('description')->nullable();
+            $table->enum('code_type',['percent','shopping_cart','product'])->default('percent');
+            $table->enum('amount_type',['percent','money'])->default('percent');
             $table->integer('amount');
-            $table->dateTime('expiration_date_time');
-
+            $table->dateTime('expiration_date_time')->nullable();
+            $table->integer('counter')->nullable();
             $table->timestamps();
         });
     }
