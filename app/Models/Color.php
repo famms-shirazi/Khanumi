@@ -11,6 +11,8 @@ class Color extends Model
     use HasFactory;
     protected $fillable = ['unique_id'];
 
+    protected $table = 'colors_tbl';
+
     public function product():BelongsTo
     {
         return $this->BelongsTo(Product::class);
