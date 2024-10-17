@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Color;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ColorController extends Controller
 {
@@ -12,8 +13,8 @@ class ColorController extends Controller
      */
     public function index()
     {
-        $colors = Color::paginate();
-        // dd($colors);
+        $colors = QueryBuilder::for(Color::class)->allowedFilters(filters: 'unique_id')->paginate();
+        // $colors = Color::paginate();
         return view('color.index',compact('colors'));
     }
 
