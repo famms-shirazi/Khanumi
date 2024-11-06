@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Brick\Math\Exception\DivisionByZeroException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -65,8 +67,21 @@ class UserController extends Controller
      */
     public function show(int $id)
     {
-        $user = User::find($id);
-        dd($user);
+        try{
+            $user = User::findorFail($id);
+            $response = response()->json([
+                'success' => true,
+                'data' => $user
+            ], 200);
+            return $response;
+        }catch (ModelNotFoundException $exception){
+            $response = response()->json([
+                'success' => false,
+                'message' => 'کابری یافت نشد',
+                'error' => $exception->getMessage()
+            ],404);
+            return $response;
+        }
     }
 
     /**
@@ -83,23 +98,37 @@ class UserController extends Controller
      */
     public function update(Request $request,int $id)
     {
-        $user = User::find($id);
-        $firstName = $request->input('first_name');
-        $lastName = $request->input('last_name');
-        $phoneNumber = $request->input('phone_number');
-        $email = $request->input('email');
-        $nationalCode = $request->input('national_code');
-        $gender = $request->input('gender');
-        $birthdayDate = $request->input('birthday_date');
-        $user->first_name = $request->input('first_name');
-        $user->last_name = $request->input('last_name');
-        $user->phone_number = $request->input('phone_number');
-        $user->email = $request->input('email');
-        $user->national_code = $request->input('national_code');
-        $user->gender = $request->input('gender');
-        $user->birthday_date = $request->input('birthday_date');
-        $user->save();
-        return response()->json(['message' => 'User updated successfully.', 'user' => $user]);
+        try{
+            $user = User::findOrFail($id);
+        }catch (ModelNotFoundException $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => 'کاربری یافت نشد',
+                'error' => $exception->getMessage()
+            ]);
+        }
+        try {
+            $user->first_name = $request->input('first_name');
+            $user->last_name = $request->input('last_name');
+            $user->phone_number = $request->input('phone_number');
+            $user->email = $request->input('email');
+            $user->national_code = $request->input('national_code');
+            $user->gender = $request->input('gender');
+            $user->birthday_date = $request->input('birthday_date');
+            $user->save();
+            if($user->exists()){
+                return response()->json([
+                    'success' => true,
+                    'message' => 'کاربر با موفقیت ویرایش شد',
+                ],200);
+            }
+        }catch (QueryException $exception){
+            return response()->json([
+                'success' => false,
+                'message' => 'خطایی در بروز رسانی اطلاعات کاربر پیش آمد',
+                'error' => $exception->getMessage()
+            ],500);
+        }
     }
 
     /**
