@@ -136,9 +136,28 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = User::destroy($id);
-        dd($user);
+        try {
+            $deleted = User::destroy($id);
+            if ($deleted) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'کاربر با موفقیت حذف شد'
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'کاربری با این شناسه یافت نشد'
+                ], 404);
+            }
+        } catch (QueryException $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => 'خطایی در رابطه با حذف کاربر پیش آمد',
+                'error' => $exception->getMessage()
+            ], 500);
+        }
     }
+
 
     public function getCsrfToken(){
         $csrfToken = csrf_token();
