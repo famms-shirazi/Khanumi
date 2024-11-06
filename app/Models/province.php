@@ -9,4 +9,6 @@ class province extends Model
 {
     use HasFactory;
 
+    protected $table = "provinces_tbl";
+
 }

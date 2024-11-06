@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Color extends Model
 {
     use HasFactory;
+
+    protected $table = "colors_tbl";
+
     protected $fillable = ['unique_id'];
 
     public function product():BelongsTo

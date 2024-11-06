@@ -13,6 +13,7 @@ class ShoppingCart extends Model
     use HasFactory;
     protected $fillable = ['final_price'];
 
+    protected $table  = "shopping_carts_tbl";
     public function user():BelongsTo
     {
         return $this->belongsTo(User::class);

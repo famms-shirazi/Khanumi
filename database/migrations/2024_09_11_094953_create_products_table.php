@@ -21,8 +21,9 @@ return new class extends Migration
             $table->text('product_introduction_text');
             $table->text('consumption_guide_text');
             $table->integer('inventory');
+            $table->boolean('special_offer');
             $table->foreignId('brand_id')->constrained('brands_tbl')->onDelete('cascade');
-            $table->foreignId('special_offer_id')->constrained('special_offers_tbl')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('products_tbl');
     }
 };

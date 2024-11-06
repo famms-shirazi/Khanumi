@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('postal_code');
             $table->foreignId('user_id')->constrained('users_tbl')->onDelete('cascade');
-            $table->foreignId('city_id')->constrained('city')->onDelete('cascade');
+            $table->foreignId('city_id')->constrained('cities_tbl')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('addresses');
+        Schema::dropIfExists('addresses_tbl');
     }
 };

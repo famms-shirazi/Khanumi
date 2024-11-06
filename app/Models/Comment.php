@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Comment extends Model
 {
     use HasFactory;
+
+    protected $table = "comments_tbl";
     protected $fillable = [
         'text',
         'image',

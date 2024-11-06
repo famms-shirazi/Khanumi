@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Transaction extends Model
 {
     use HasFactory;
+
+    protected $table  = "transactions_tbl";
+
     protected $fillable = [
         'status',
         'type_id',

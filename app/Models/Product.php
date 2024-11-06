@@ -10,7 +10,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
     {
-    use HasFactory;
+        use HasFactory;
+
+        protected $table  = "products_tbl";
+
         protected $fillable = [
             'Persian_title',
             'English_title',

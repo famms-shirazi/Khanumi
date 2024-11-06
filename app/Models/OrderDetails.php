@@ -10,6 +10,7 @@ class OrderDetails extends Model
 {
     use HasFactory;
 
+    protected $table = "order_details_tbl";
     public function brands(): HasMany
     {
         return $this->hasMany(Product::class);

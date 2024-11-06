@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use PHPUnit\Event\Facade;
 
 class BrandController extends Controller
 {
@@ -11,15 +13,17 @@ class BrandController extends Controller
      */
     public function index()
     {
-        //
+        $brands = DB::table('brands_tbl')->get();
+        dd($brands);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $input = $request->collect();;
+        dd($input);
     }
 
     /**
@@ -35,7 +39,9 @@ class BrandController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $count = DB::table('brands_tbl')->count('Persian_title');
+        $brand = DB::table('brands_tbl')->where('id',$count)->get();
+        dd($brand);
     }
 
     /**
@@ -59,6 +65,7 @@ class BrandController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        DB::table('brands_tbl')->where('id', $id)->delete();
+
     }
 }

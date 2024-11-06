@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('city', function (Blueprint $table) {
+        Schema::create('cities_tbl', function (Blueprint $table) {
             $table->id();
 
             $table->string('name');
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamps();
 
             //relational fields
-            $table->foreignId('province_id')->constrained('province')->onDelete('cascade');
+            $table->foreignId('province_id')->constrained('provinces_tbl')->onDelete('cascade');
 
 
         });

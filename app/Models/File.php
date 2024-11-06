@@ -10,6 +10,8 @@ class File extends Model
 {
     use HasFactory;
 
+    protected $table = "files_tbl";
+
     protected $fillable =[
         'url',
         'fileable_id',
