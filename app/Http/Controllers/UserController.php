@@ -19,8 +19,20 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return response()->json($users);
+        try {
+            $users = User::all();
+            return response()->json([
+                'success' => true,
+                'data' => $users
+            ], 200);
+        }catch (Exception $exception){
+            return response()->json([
+                'success' => false,
+                'message' => 'خطایی در دریافت لیست کاربران پیش آمد',
+                'error' => $exception->getMessage()
+            ],500);
+        }
+
     }
 
     /**
