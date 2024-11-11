@@ -21,7 +21,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = ['first_name', 'last_name', 'phone_number', 'email', 'national_code', 'gender', 'birthday_date'];
+    protected $fillable = ['first_name', 'last_name', 'phone_number', 'email', 'national_code', 'gender', 'birthday_date','password','username'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -38,6 +38,12 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
+
+    public function findForAuth($username){
+        if(filter_var($username,FILTER_VALIDATE_EMAIL))
+            return $this->where('email', $username)->first();
+            return $this->where('username', $username)->first();
+    }
     protected function casts(): array
     {
         return [

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('national_code');
             $table->boolean('gender');
             $table->date('birthday_date');
+            $table->string('password');
 
             $table->timestamps();
         });

@@ -18,7 +18,7 @@ class UserController extends Controller
     {
         try {
             $users = User::all();
-            return response()->json(['success' => true, 'data' => $users], 200);
+            return response()->json(['success' => true, 'data' => $users,'session'=>$request->session()->all()], 200);
         }catch (Exception $exception){
             return response()->json(['success' => false, 'message' => 'خطایی در دریافت لیست کاربران پیش آمد', 'error' => $exception->getMessage()],500);
         }
@@ -33,7 +33,7 @@ class UserController extends Controller
             'national_code' => 'required|numeric|unique:users_tbl,national_code',
             'gender' => 'nullable|in:1,0',
             'birthday_date' => 'required|date|date_format:Y-m-d',
-        ]);
+            'password'=> ['required', 'string', 'min:10', 'regex:/[a-z]/', 'regex:/[A-Z]/', 'regex:/[0-9]/', 'regex:/[@$!%*#?&]/']]);
         try {
             $user = User::create($validatedData);
             return response()->json(['success' => true, 'message' => 'کاربر با موفقیت ثبت شد.', 'data' => $user], 201);
