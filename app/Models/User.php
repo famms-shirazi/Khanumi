@@ -40,9 +40,9 @@ class User extends Authenticatable
      */
 
     public function findForAuth($username){
-        if(filter_var($username,FILTER_VALIDATE_EMAIL))
-            return $this->where('email', $username)->first();
-            return $this->where('username', $username)->first();
+        if(filter_var($username,FILTER_VALIDATE_EMAIL)) return $this->where('email', $username)->first();
+            else if(preg_match('/^09\d{9}$/', $username)) return $this->where('username', $username)->first();
+            else return $this->where('phone_number', $username)->first();
     }
     protected function casts(): array
     {
