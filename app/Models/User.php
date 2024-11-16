@@ -21,7 +21,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = ['first_name', 'last_name', 'phone_number', 'email', 'national_code', 'gender', 'birthday_date','password','username'];
+    protected $fillable = ['first_name', 'last_name', 'phone_number', 'email', 'national_code', 'gender', 'birthday_date','user_password','username'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -29,12 +29,13 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
+        'user_password',
         'remember_token',
     ];
 
     /**
      * Get the attributes that should be cast.
+     *
      *
      * @return array<string, string>
      */
@@ -44,11 +45,15 @@ class User extends Authenticatable
             else if(preg_match('/^09\d{9}$/', $username)) return $this->where('username', $username)->first();
             else return $this->where('phone_number', $username)->first();
     }
+    public function getAuthPassword()
+    {
+        return $this->user_password;
+    }
+
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
         ];
     }
 

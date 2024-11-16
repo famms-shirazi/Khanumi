@@ -19,7 +19,7 @@ class AuthController extends Controller
 {
     private const API_KEY = '616A316D546A316E4A6A7757435A67486F4D41746448594B326977306F6F43596453517832662B565169493D';
     private const template = 'verify';
-    private function otpGenerator(String $phoneNumber):int{
+    private function otpGenerator(String $phoneNumber){
         try{
             $data = ['template' => self::template, 'receptor' => $phoneNumber, 'token' => str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT)];
             $response = Http::withOptions(['verify'=>false])->post('https://api.kavenegar.com/v1/' . self::API_KEY . '/verify/lookup.json', $data);
@@ -40,7 +40,6 @@ class AuthController extends Controller
             : 'username');
         if ($field == 'email' || $field == 'username') {
             $credentials = [$field => $request->input('input'), 'password' => $request->password];
-            $user = DB::table('users_tbl')->where('first_name','Farham')->first();
                 try{
                     $auth_status = Auth::attempt($credentials);
                     if ($auth_status) {
@@ -56,19 +55,18 @@ class AuthController extends Controller
         }else {
 
               $otpGeneratedCode = $this->otpGenerator($input);
-              dd($otpGeneratedCode);
               $enteredOtp = $request->input('otp-entered');
+              $otpGeneratedCode = "3323";
               $otpValidationStatus = $this->otpVerificator($otpGeneratedCode,$enteredOtp);
-              $userExistence = User::where('phone_number', $input)->exists;
+              $userExistence = User::where('phone_number', $input)->exists();
               // فعلا اینجا این مقدار را برابر با true قرار دادم اما بعدا که مشکلات مربوط به پنل پیامکی برطرف شد این مشکل را برطرف میکنم
-              $otpGeneratedCode = true;
               if($otpValidationStatus){
                   if($userExistence){
                       try{
                           $user = User::where('phone_number', $input)->first();
                           Auth::login($user);
                           Session::put('user-id', $user->id);
-                          Session::put('auth-id', Auth::id());
+                          Session::put('auth-id', Auth::id().str_pad(random_int(0, 999999),4));
                           return response()->json(['success' => true, 'message' => 'کاربر با موفقیت وارد شد', 'user' => Auth::user()], 201);
                       }catch (Exception $exception){
                           return response()->json(['success' => false, 'message' => 'ورود کاربر با خطا مواجه شد', 'exception' => $exception->getMessage()], 500);

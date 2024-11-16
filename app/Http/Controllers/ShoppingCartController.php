@@ -9,6 +9,32 @@ class ShoppingCartController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    private function checkLocalAvailablity():bool{
+        return true;
+    }
+
+    private function checkServerAvailablity():bool{
+        return false;
+    }
+
+    private function fetchDBCart($userId){
+
+    }
+    private function serverSideProductAdding(){
+
+    }
+    private function clientSideProductAdding(){
+
+    }
+
+    private function serverCartCreating(){
+
+    }
+    private function localCartCreating(){
+
+    }
+
     public function index()
     {
         //
