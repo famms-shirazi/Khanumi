@@ -90,6 +90,9 @@ class AuthController extends Controller
     }
     public function logOut(Request $request):JsonResponse{
         Auth::logout();
+        Session::flush();
+        session()->invalidate();
+        session()->regenerateToken();
         if(!Auth::check()) return response()->json(['success'=>true,'message'=>'کاربر با موفقیت خارج شد'],200);
     }
 }

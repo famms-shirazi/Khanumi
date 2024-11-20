@@ -8,6 +8,7 @@ use App\Models\User;
 use http\Env\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Mockery\Exception;
 use Illuminate\Support\Facades\Session;
@@ -20,17 +21,26 @@ class ShoppingCartController extends Controller
     private function checkLocalAvailablity(int $localCartSize):bool{
         return $localCartSize != 0;
     }
-    private function checkServerAvailablity(int $userId):JsonResponse{
+    public function checkUserAuthentication($userId):bool{
+        $sessionUserId = Auth::getSession()->get('user-id');
+        if($userId == $sessionUserId) return true;
+        return false;
+    }
+    private function checkServerAvailability(int $userId):JsonResponse{
         try{
-            $result = DB::table('shopping_carts_tbl')->where('user_id', $userId)->where('status', 'processing')->first();
-            if ($result) return response()->json(['success' => true, 'data'=> $result]);
-            return response()->json(['success' => false]);
+            $userAuthStatus = $this->checkUserAuthentication($userId);
+            if ($userAuthStatus){
+                $result = DB::table('shopping_carts_tbl')->where('user_id', $userId)->where('status', 'processing')->first();
+                if ($result) return response()->json(['success' => true, 'data'=> $result]);
+                return response()->json(['success' => false]);
+            }else return response()->json(['success'=>false, 'message'=>'شما ابتدا می بایست به حساب کاربری خود وارد شوید.']);
+
         }catch (Exception $exception){
             return response()->json(['success'=> false,'exception'=>$exception->getMessage()]);
         }
     }
     private function fetchDBCart(int $userId):JsonResponse{
-        $result = $this->checkServerAvailablity($userId);
+        $result = $this->checkServerAvailability($userId);
         if ($result->getData()->success){
             $user = User::where('id', $userId)
                 ->whereHas('shoppingCarts', function ($query) {
@@ -47,8 +57,8 @@ class ShoppingCartController extends Controller
         return response()->json(['success'=>'false']);
     }
     private function serverSideProductAdding(int $userId, int $productId):JsonResponse{
-        $serverAvailability = $this->checkServerAvailablity($userId)->getData()->success;
-        if ($serverAvailability){
+        $serverAvailabilityResult = $this->checkServerAvailability($userId)->getData();
+        if ($serverAvailabilityResult->success){
             try{
                 $shoppingCart = ShoppingCart::where('user_id', $userId)->where('status', 'processing')->first();
                 $productAddition = $shoppingCart->products()->attach($productId);
@@ -57,7 +67,7 @@ class ShoppingCartController extends Controller
                 return response()->json(['success'=>false,'message'=>'محصول به سبد خرید اضافه نشد','exception'=>$exception->getMessage()]);
             }
         }
-        else return $this->checkServerAvailablity($userId);
+        return response()->json($serverAvailabilityResult);
     }
     private function serverCartCreating($userId):JsonResponse{
         try{
@@ -68,10 +78,9 @@ class ShoppingCartController extends Controller
             return response()->json(['success'=>false,'message'=>'سبد خرید ایجاد نشد','exception'=>$exception]);
         }
     }
-
     public function addProductToShoppingCart(int $localCartSize,int $userId, int $productId):JsonResponse{
         $localCartAvailable = $this->checkLocalAvailablity($localCartSize);
-        $serverCartAvailable = $this->checkServerAvailablity($userId)->getData()->success;
+        $serverCartAvailable = $this->checkServerAvailability($userId)->getData()->success;
         $result = $this->serverSideProductAdding($userId,$productId);
         $dbCart = $this->fetchDBCart($userId);
         if (!$localCartAvailable) {
@@ -81,9 +90,13 @@ class ShoppingCartController extends Controller
             }else{
                 $serverCartCreation = $this->serverCartCreating($userId)->getData()->success;
                 if ($serverCartCreation){
-                    $result = $this->serverSideProductAdding($userId,$productId);
-                    $dbCart = $this->fetchDBCart($userId);
-                    return response()->json(['success'=>true,'message'=>'محصول موفقیت به سبد خرید اضافه شد', 'products'=>$dbCart->getData()->data]);
+                    $result = $this->serverSideProductAdding($userId,$productId)->getData();
+                    if($result->success){
+                        $dbCart = $this->fetchDBCart($userId);
+                        return response()->json(['success'=>true,'message'=>'محصول موفقیت به سبد خرید اضافه شد', 'products'=>$dbCart->getData()->data]);
+                    }else{
+                        return response()->json(['success'=>false,'message'=>$result->message]);
+                    }
                 }
             }
         }else{
@@ -94,26 +107,31 @@ class ShoppingCartController extends Controller
     }
     public function showShoppingCart(int $localCartSize,int $userId):JsonResponse{
         $localCartAvailable = $this->checkLocalAvailablity($localCartSize);
-        $serverCartAvailable = $this->checkServerAvailablity($userId)->getData()->success;
+        $result = $this->checkUserAuthentication($userId);
+        $serverCartAvailable = $this->checkServerAvailability($userId)->getData()->success;
         if($localCartAvailable){
-            $dbCart = $this->fetchDBCart($userId);
-            if (!$dbCart->getData()->success) return response()->json(['success'=>true,'message'=>'سبد خرید شما خالی است']);
-            return response()->json(['success'=>true,'data'=>$dbCart->getData()]);
-        }else{
-            if ($serverCartAvailable){
+            if($result){
                 $dbCart = $this->fetchDBCart($userId);
+                if (!$dbCart->getData()->success) return response()->json(['success'=>true,'message'=>'سبد خرید شما خالی است']);
                 return response()->json(['success'=>true,'data'=>$dbCart->getData()]);
-            }else return response()->json(['success'=>true,'message'=>'سبد خرید شما خالی است']);
+            }else return response()->json(['success'=>false, 'message'=>'شما ابتدا می بایست به حساب کابری خود وارد شوید.']);
+        }else{
+            if($result){
+                if ($serverCartAvailable){
+                    $dbCart = $this->fetchDBCart($userId);
+                    return response()->json(['success'=>true,'data'=>$dbCart->getData()]);
+                }else return response()->json(['success'=>true,'message'=>'سبد خرید شما خالی است']);
+            }else return response()->json(['success'=>false, 'message'=>'شما ابتدا می بایست به حساب کابری خود وارد شوید.']);
         }
     }
     public function index()
     {
         $localCartSize = false;
         $user = Session::get('user-id');
-        $userId = User::where('id',$user)->first()->id;
+        $userId = User::where('id',3)->first()->id;
         $productId = 262;
 
-        $addProduct = $this->addProductToShoppingCart($localCartSize,$userId,$productId);
+        // $addProduct = $this->addProductToShoppingCart($localCartSize,$userId,$productId);
         $showShoppingCart = $this->showShoppingCart($localCartSize,$userId);
 
 //        return $addProduct;
