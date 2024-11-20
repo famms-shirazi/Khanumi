@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('shopping_carts_tbl', function (Blueprint $table) {
             $table->id();
 
-            $table->double('final_price');
+            $table->double('final_price')->nullable();
 
             //relational fields
             $table->foreignId('user_id')->constrained('users_tbl')->onDelete('cascade');

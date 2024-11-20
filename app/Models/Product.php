@@ -14,14 +14,7 @@ class Product extends Model
 
         protected $table  = "products_tbl";
 
-        protected $fillable = [
-            'Persian_title',
-            'English_title',
-            'product_size',
-            'price',
-            'product_introduction_text',
-            'consumption_guide_text'
-    ];
+        protected $fillable = ['persian_title', 'english_title', 'slug', 'product_size', 'price', 'product_introduction_text', 'consumption_guide_text', 'inventory', 'special_offer', 'brand_id'];
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
@@ -38,6 +31,6 @@ class Product extends Model
 //    }
     public function shoppingCarts(): BelongsToMany
     {
-        return $this->belongsToMany(ShoppingCart::class);
+        return $this->belongsToMany(ShoppingCart::class,'product_shopping_cart_tbl');
     }
 }

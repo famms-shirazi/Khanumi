@@ -53,7 +53,6 @@ class AuthController extends Controller
                         return response()->json(['success' => false, 'message' => 'ورود کاربر با خطا مواجه شد', 'exception' => $exception->getMessage()], 500);
                 }
         }else {
-
               $otpGeneratedCode = $this->otpGenerator($input);
               $enteredOtp = $request->input('otp-entered');
               $otpGeneratedCode = "3323";
